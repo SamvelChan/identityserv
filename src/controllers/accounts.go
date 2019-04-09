@@ -1,10 +1,10 @@
 package controllers
 
 import (
+	model "../models"
+	util "../utils"
 	"encoding/json"
 	"fmt"
-	m "identityserv/models"
-	u "identityserv/utils"
 	"io"
 	"net/http"
 	"path"
@@ -14,7 +14,7 @@ import (
 func CreateAccount(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	account := m.Account {}
+	account := model.Account {}
 	out := make([]byte,1024)
 	bodyLen, err := r.Body.Read(out)
 
@@ -32,31 +32,35 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = m.CreateAccount(account)
+	err = model.CreateAccount(account)
 
 
 	if err == nil {
-		u.RespondwithJSON(w, http.StatusCreated, map[string]string{"message": "successfully created"})
+		util.RespondwithJSON(w, http.StatusCreated, map[string]string{"message": "successfully created"})
 	} else {
-		u.RespondWithError(w, http.StatusInternalServerError,  "oops! internal server error")
+		util.RespondWithError(w, http.StatusInternalServerError,  "oops! internal server error")
 	}
 }
 
 func GetAccount(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type", "application/json")
 
-	account := m.Account {}
+	account := model.Account {}
 	accountId, err := strconv.Atoi(path.Base(r.RequestURI))
 
 	if err == nil {
-		account = m.GetAccount(accountId)
+		account = model.GetAccount(accountId)
 	}
 
 	if account.ID == 0 {
-		u.RespondwithJSON(w, http.StatusNoContent, map[string]string {"message":"sorry! account not found"})
+		util.RespondwithJSON(w, http.StatusNoContent, map[string]string {"message":"sorry! account not found"})
 	} else {
 		enc := json.NewEncoder(w)
 		enc.Encode(&account)
 	}
 
+}
+
+func ReturnTestString(w http.ResponseWriter, r *http.Request) {
+	util.RespondwithJSON(w, http.StatusOK, map[string]string {"message":"test String"})
 }

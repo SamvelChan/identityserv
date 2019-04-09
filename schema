@@ -1,0 +1,13 @@
+create table user( user_id BIGINT AUTO_INCREMENT NOT NULL ,
+first_name varchar(100) NOT NULL,
+last_name varchar(100) NOT NULL,
+email varchar(100) NOT NULL,
+mobile varchar(100) NOT NULL,
+date_of_birth date NOT NULL,
+sex char(1) NOT NULL,
+create_time DATETIME NOT NULL,
+update_time DATETIME NOT NULL,
+PRIMARY KEY (user_id));
+
+
+

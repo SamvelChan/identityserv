@@ -1,13 +1,14 @@
 package main
 
 import (
+	controller "../controllers"
+	util "../utils"
 	"database/sql"
+	"fmt"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	_ "github.com/go-chi/chi/middleware"
 	_ "github.com/go-sql-driver/mysql"
-	c "identityserv/controllers"
-	u "identityserv/utils"
 	_ "io"
 	"net/http"
 	_ "strconv"
@@ -19,8 +20,9 @@ var db *sql.DB
 
 
 func routers() *chi.Mux {
-	router.Get("/v1/account/{id}", c.GetAccount)
-	router.Post("/v1/account", c.CreateAccount)
+	router.Get("/v1/account/{id}", controller.GetAccount)
+	router.Post("/v1/account", controller.CreateAccount)
+	router.Post("/v1/test", controller.ReturnTestString)
 
 	return router
 }
@@ -29,6 +31,6 @@ func routers() *chi.Mux {
 func main() {
 	router = chi.NewRouter()
 	router.Use(middleware.Recoverer)
-
-	http.ListenAndServe(":8000", u.Logger(routers()))
+	fmt.Println("Starting server...")
+	http.ListenAndServe(":8000", util.Logger(routers()))
 }
