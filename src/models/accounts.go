@@ -2,6 +2,7 @@ package models
 
 import (
 	_ "errors"
+	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"time"
 )
@@ -12,8 +13,8 @@ type Account struct {
 	LastName   string    `json:"last_name"`
 	Email string `json:"email"`
 	Mobile string `json:"mobile"`
-	DOB string `json:"mobile"`
-	Sex string `json:"mobile"`
+	DOB string `json:"dob"`
+	Sex string `json:"sex"`
 }
 
 func CreateAccount(account Account) (error) {
@@ -22,13 +23,13 @@ func CreateAccount(account Account) (error) {
 	    var currentTime = time.Now()
 
 	    //insert into DB
-	_ , err := db.Exec("insert into account(first_name,last_name,email,mobile,date_of_birth,sex,create_time,update_time) values(?,?,?,?,?,?,?,?)",
+	_ , err := db.Exec("insert into user(first_name,last_name,email,mobile,date_of_birth,sex,create_time,update_time) values(?,?,?,?,?,?,?,?)",
 		account.FirstName,
 		account.LastName,
 		account.Email,
 		account.Mobile,
-		account.Sex,
 		account.DOB,
+		account.Sex,
 		currentTime,
 		currentTime)
 
@@ -39,9 +40,11 @@ func CreateAccount(account Account) (error) {
 func GetAccount(accountId int) (Account) {
 	account := Account{}
 
-	queryString := "select * from account where id = ? "
+	fmt.Println("Account id (%s)",accountId)
 
-	result := db.QueryRow(queryString, accountId).Scan(
+	queryString := "select user_id,first_name,last_name,email,mobile,date_of_birth,sex from user where user_id = ? "
+
+	db.QueryRow(queryString, accountId).Scan(
 		&account.ID,
 		&account.FirstName,
 		&account.LastName,
@@ -50,9 +53,6 @@ func GetAccount(accountId int) (Account) {
 		&account.DOB,
 		&account.Sex)
 
-	if result != nil {
-		return Account{}
-	}
-
-	return account
+	fmt.Println("Account info:",account)
+    return account
 }

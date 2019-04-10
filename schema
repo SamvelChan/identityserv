@@ -10,4 +10,6 @@ update_time DATETIME NOT NULL,
 PRIMARY KEY (user_id));
 
 
+mysql -h gruppe.cehfmqygfumf.us-west-2.rds.amazonaws.com -u gruppe_user -p aarav625
 
+insert into user(first_name,last_name,email,mobile,date_of_birth,sex,create_time,update_time)values('sam','vel','sam@test.com','09-26-1988','2242098900','M',NOW(),NOW());
